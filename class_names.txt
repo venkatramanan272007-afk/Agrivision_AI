@@ -1,0 +1,7 @@
+Early_Blight
+Healthy
+Late_Blight
+Tomato___Bacterial_spot
+Tomato___Early_blight
+Tomato___Late_blight
+Tomato___healthy
