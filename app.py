@@ -16,20 +16,111 @@ DEMO_USERS = {"student": hashlib.sha256("agrivision123".encode()).hexdigest()}
 
 st.markdown("""
 <style>
-.stApp {
-    background: linear-gradient(135deg, #edf8ee, #d9f0dc, #f7fbf5);
-    color: #183b2a;
+/* Main green background */
+.stApp,
+[data-testid="stAppViewContainer"] {
+    background: linear-gradient(135deg, #edf8ee, #d9f0dc, #f7fbf5) !important;
+    color: #183b2a !important;
 }
-[data-testid="stSidebar"]{background:linear-gradient(180deg,#123d2b,#1b5e3a)}
-[data-testid="stSidebar"] *{color:white!important}
-h1,h2,h3{color:#175c36}
-.hero{background:linear-gradient(120deg,#174b32,#398653);padding:28px;border-radius:20px;color:white;margin-bottom:20px}
-.hero h1,.hero p{color:white!important}.hero p{font-size:17px}
-.info-card{background:white;border:1px solid #c7e5cc;border-radius:16px;padding:18px;min-height:110px;margin-bottom:12px;box-shadow:0 4px 14px #164e2b0f}
-.info-card h3{color:#17613a!important;margin-top:0}
-.stButton>button{background:#207447;color:white;border-radius:10px;font-weight:600}
-div[data-testid="stFileUploader"]{background:#ffffffb3;border:1px dashed #72ad80;border-radius:14px;padding:12px}
-.footer{text-align:center;color:#55745e;padding:20px;font-size:13px}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #123d2b, #1b5e3a) !important;
+}
+[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
+/* Headings */
+h1, h2, h3 {
+    color: #175c36 !important;
+}
+
+/* Welcome banner */
+.hero {
+    background: linear-gradient(120deg, #174b32, #398653);
+    padding: 28px;
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 20px;
+}
+.hero h1, .hero p {
+    color: white !important;
+}
+.hero p {
+    font-size: 17px;
+}
+
+/* Login and Demo tabs */
+.stTabs [data-baseweb="tab-list"] {
+    background: #dcecdf !important;
+    padding: 6px;
+    border-radius: 12px;
+    gap: 8px;
+}
+.stTabs button[data-baseweb="tab"] {
+    background: #ffffff !important;
+    color: #174b32 !important;
+    border-radius: 8px;
+}
+.stTabs button[data-baseweb="tab"][aria-selected="true"] {
+    background: #287747 !important;
+    color: #ffffff !important;
+}
+.stTabs button[data-baseweb="tab"] p {
+    color: inherit !important;
+}
+
+/* Input boxes */
+.stTextInput label {
+    color: #174b32 !important;
+}
+.stTextInput input {
+    background: #ffffff !important;
+    color: #183b2a !important;
+    border: 1px solid #72ad80 !important;
+}
+
+/* Buttons */
+.stButton > button {
+    background: #207447 !important;
+    color: #ffffff !important;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+}
+
+/* Upload box */
+div[data-testid="stFileUploader"] {
+    background: #ffffff !important;
+    border: 1px dashed #72ad80;
+    border-radius: 14px;
+    padding: 12px;
+}
+
+/* Information cards */
+.info-card {
+    background: #ffffff;
+    border: 1px solid #c7e5cc;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 12px;
+}
+.info-card h3 {
+    color: #17613a !important;
+}
+
+/* Messages */
+.stAlert p {
+    color: #183b2a !important;
+}
+
+.footer {
+    text-align: center;
+    color: #55745e;
+    padding: 20px;
+    font-size: 13px;
+}
 </style>
 """, unsafe_allow_html=True)
 
