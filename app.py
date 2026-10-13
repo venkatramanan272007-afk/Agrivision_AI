@@ -90,74 +90,21 @@ PLANTS = [
 ]
 
 # Login gate
-
-
 if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
+    st.session_state["logged_in"] = False
 
 if "username" not in st.session_state:
-    st.session_state.username = ""
-   if not st.session_state.get("logged_in", False):
-    st.markdown("""
-    <style>
-    .stApp {
-        background: linear-gradient(135deg, #123d2b, #207447, #d9f0dc);
-        color: #183b2a;
-    }
+    st.session_state["username"] = ""
+  
+if not st.session_state.get("logged_in", False):
+    st.markdown(
+        '<div class="hero"><h1>🌿 Welcome to AgriVision</h1>'
+        '<p>Browse plants and trees, open photos and videos, '
+        'and try tomato leaf analysis.</p></div>',
+        unsafe_allow_html=True
+    )
 
-    .block-container {
-        padding-top: 2rem;
-    }
-
-    .login-card {
-        background: #f4f8f1;
-        padding: 28px;
-        border-radius: 20px;
-        border: 2px solid #a7d5ad;
-        box-shadow: 0 8px 25px #092b1940;
-        margin-bottom: 20px;
-    }
-
-    h1, h2, h3 {
-        color: #175c36;
-    }
-
-    div[data-testid="stTextInput"] label {
-        color: #174b32;
-        font-weight: 600;
-    }
-
-    .stButton > button {
-        background: #207447;
-        color: white;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-    }
-
-    .stButton > button:hover {
-        background: #174b32;
-        color: white;
-        border: 1px solid #8fcea0;
-    }
-
-    div[data-baseweb="tab-list"] {
-        background: #e5f0df;
-        border-radius: 10px;
-        padding: 5px;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="login-card">
-        <h1>🌿 Welcome to AgriVision</h1>
-        <p>Smart Agriculture • Plant Health Detection</p>
-        <p>Explore plants, trees and AI-powered tomato leaf analysis.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    tab1, tab2 = st.tabs(["🔐 Login", "Demo Access"])
+    tab1, tab2 = st.tabs(["🔐 Login", "Demo access"])
 
     with tab1:
         username = st.text_input("Username")
@@ -166,23 +113,18 @@ if "username" not in st.session_state:
         if st.button("Login", use_container_width=True):
             digest = hashlib.sha256(password.encode()).hexdigest()
 
-            if (
-                username.strip() in DEMO_USERS
-                and hmac.compare_digest(
-                    digest, DEMO_USERS[username.strip()]
-                )
+            if username.strip() in DEMO_USERS and hmac.compare_digest(
+                digest, DEMO_USERS[username.strip()]
             ):
-                st.session_state.logged_in = True
-                st.session_state.username = username.strip()
+                st.session_state["logged_in"] = True
+                st.session_state["username"] = username.strip()
                 st.rerun()
             else:
                 st.error("Incorrect username or password.")
 
     with tab2:
         st.info("Demo username: student | Password: agrivision123")
-        st.warning(
-            "Demo login only. Do not use your personal password."
-        )
+        st.warning("Demo login only; do not use a personal password.")
 
     st.stop()
 with st.sidebar:
