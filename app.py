@@ -348,7 +348,13 @@ elif page == "AI Leaf Analysis":
                     else:
                         idx = int(np.argmax(scores))
                         confidence = float(scores[idx]) * 100
-                        st.success(f"Predicted class: {classes[idx].replace('_',' ')}")
+                        predicted_class = classes[idx].replace("_", " ")
+                        st.success(f"Predicted class: {predicted_class}")
+                        save_report(
+                        plant_name="Tomato",
+                        result=predicted_class,
+                        confidence=confidence
+                        )
                         st.metric("Model score", f"{confidence:.2f}%")
                         st.progress(float(np.clip(confidence/100,0,1)))
                         with st.expander("Show all class scores"):
@@ -358,14 +364,14 @@ elif page == "AI Leaf Analysis":
         except Exception as e:
             st.error("Could not analyze this image. Check the model file and training preprocessing.")
             st.code(str(e))
-            
-save_report(
-    plant_name=selected_plant,
-    result=predicted_class,
-    confidence=confidence
-)
+    else:
+            except Exception as e:
+            st.error("Could not analyze this image. Check the model file and training preprocessing.")
+            st.code(str(e))
+
     else:
         st.info("Upload a JPG, JPEG or PNG image to begin.")
+       
 
 elif page == "About Project":
     st.markdown('<div class="hero"><h1>🌿 About AgriVision</h1><p>A student mini project for plant education and tomato leaf classification.</p></div>', unsafe_allow_html=True)
