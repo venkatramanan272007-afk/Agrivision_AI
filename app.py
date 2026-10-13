@@ -14,6 +14,42 @@ CLASS_PATH = Path("class_names.txt")
 # Demo-only login. Do not use real passwords here.
 DEMO_USERS = {"student": hashlib.sha256("agrivision123".encode()).hexdigest()}
 
+DB_PATH = "agrivision_reports.db"
+
+def init_db():
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS scan_reports (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                plant_name TEXT NOT NULL,
+                result TEXT NOT NULL,
+                confidence REAL,
+                scan_date TEXT NOT NULL
+            )
+        """)
+
+def save_report(plant_name, result, confidence):
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            """INSERT INTO scan_reports
+               (plant_name, result, confidence, scan_date)
+               VALUES (?, ?, ?, ?)""",
+            (
+                plant_name,
+                result,
+                float(confidence),
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            )
+        )
+
+def get_reports():
+    with sqlite3.connect(DB_PATH) as conn:
+        return pd.read_sql_query(
+            "SELECT * FROM scan_reports ORDER BY id DESC",
+            conn
+        )
+
+init_db()
 st.markdown("""
 <style>
 /* Main green background */
@@ -127,6 +163,26 @@ div[data-testid="stFileUploader"] {
 
 @st.cache_resource
 def load_model():
+    
+st.header("📊 Plant Scan Reports")
+
+reports = get_reports()
+
+st.metric("Total Scans", len(reports))
+
+if not reports.empty:
+    st.dataframe(reports, use_container_width=True)
+
+    csv_data = reports.to_csv(index=False).encode("utf-8-sig")
+
+    st.download_button(
+        label="📥 Download CSV Report",
+        data=csv_data,
+        file_name="agrivision_scan_reports.csv",
+        mime="text/csv"
+    )
+else:
+    st.info("No scan reports available yet.")
     if not MODEL_PATH.exists():
         raise FileNotFoundError(f"Missing model file: {MODEL_PATH}")
     return tf.keras.models.load_model(MODEL_PATH)
@@ -303,6 +359,12 @@ elif page == "AI Leaf Analysis":
         except Exception as e:
             st.error("Could not analyze this image. Check the model file and training preprocessing.")
             st.code(str(e))
+            
+save_report(
+    plant_name=selected_plant,
+    result=predicted_class,
+    confidence=confidence
+)
     else:
         st.info("Upload a JPG, JPEG or PNG image to begin.")
 
