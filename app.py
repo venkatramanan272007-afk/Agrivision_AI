@@ -16,7 +16,10 @@ DEMO_USERS = {"student": hashlib.sha256("agrivision123".encode()).hexdigest()}
 
 st.markdown("""
 <style>
-.stApp{background:linear-gradient(135deg,#edf8ee,#d9f0dc,#f7fbf5);color:#183b2a}
+.stApp {
+    background: linear-gradient(135deg, #edf8ee, #d9f0dc, #f7fbf5);
+    color: #183b2a;
+}
 [data-testid="stSidebar"]{background:linear-gradient(180deg,#123d2b,#1b5e3a)}
 [data-testid="stSidebar"] *{color:white!important}
 h1,h2,h3{color:#175c36}
