@@ -91,7 +91,13 @@ PLANTS = [
 
 # Login gate
 
-if not st.session_state.logged_in:
+
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+if "username" not in st.session_state:
+    st.session_state.username = ""
+   if not st.session_state.get("logged_in", False):
     st.markdown("""
     <style>
     .stApp {
