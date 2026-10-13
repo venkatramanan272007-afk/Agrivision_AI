@@ -318,21 +318,35 @@ elif page == "Photo & Video Gallery":
         cols = st.columns(3)
         for i, f in enumerate(photos):
             with cols[i % 3]:
-                try:
-                    st.image(Image.open(f).convert("RGB"), caption=f.name, use_container_width=True)
-                except Exception:
-                    st.warning(f"Could not open {f.name}")
-    st.divider()
-    video = st.file_uploader("Choose a plant video", type=["mp4","mov","webm"])
-    if video:
-        st.video(video)
-    st.caption("This gallery displays files you select. It does not automatically search the internet.")
+               
+        try:
+            image = Image.open(uploaded_file).convert("RGB")
+            arr, shape = prep_image(image, model)
+            scores = np.asarray(model.predict(arr, verbose=0)[0]).reshape(-1)
 
-elif page == "AI Leaf Analysis":
-    st.markdown('<div class="hero"><h1>🔬 AI Leaf Analysis</h1><p>Upload a tomato leaf photo to run the available classifier.</p></div>', unsafe_allow_html=True)
-    st.warning("The current model supports only the classes in your tomato training dataset. Other plants can be browsed but not diagnosed by this model.")
-    uploaded = st.file_uploader("Upload a tomato leaf image", type=["jpg","jpeg","png"], key="ai_upload")
-    if uploaded:
+            if len(scores) != len(classes):
+                st.error(
+                    f"Model output has {len(scores)} values, "
+                    f"but class_names.txt has {len(classes)} names."
+                )
+            else:
+                idx = int(np.argmax(scores))
+                confidence = float(scores[idx]) * 100
+                predicted_class = classes[idx].replace("_", " ")
+
+                st.success(f"Predicted class: {predicted_class}")
+                st.metric("Model score", f"{confidence:.2f}%")
+                st.progress(float(np.clip(confidence / 100, 0, 1)))
+
+                save_report(
+                    plant_name="Tomato",
+                    result=predicted_class,
+                    confidence=confidence
+                )
+
+        except Exception as e:
+            st.error("Could not analyze this image.")
+            st.code(str(e))
         try:
             image = Image.open(uploaded).convert("RGB")
             st.image(image, caption="Selected leaf photo", use_container_width=True)
