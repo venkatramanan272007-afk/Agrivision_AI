@@ -351,7 +351,13 @@ elif page == "Photo & Video Gallery":
             image = Image.open(uploaded).convert("RGB")
             st.image(image, caption="Selected leaf photo", use_container_width=True)
             if st.button("🔍 Analyze Tomato Leaf", use_container_width=True):
-                with st.spinner("Analyzing image..."):
+               with st.spinner("Analyzing image..."):
+    try:
+        # Analysis code goes here
+        pass
+    except Exception as e:
+        st.error("Could not analyze this image.")
+        st.code(str(e))
                     model = load_model()
                     classes = load_classes()
                     arr, input_shape = prep_image(image, model)
