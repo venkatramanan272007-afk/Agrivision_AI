@@ -162,27 +162,26 @@ div[data-testid="stFileUploader"] {
 
 
 @st.cache_resource
-def load_model():
-    
-st.header("📊 Plant Scan Reports")
 
-reports = get_reports()
+def reports_page():
+    st.header("📊 Plant Scan Reports")
 
-st.metric("Total Scans", len(reports))
+    reports = get_reports()
+    st.metric("Total Scans", len(reports))
 
-if not reports.empty:
-    st.dataframe(reports, use_container_width=True)
+    if not reports.empty:
+        st.dataframe(reports, use_container_width=True)
 
-    csv_data = reports.to_csv(index=False).encode("utf-8-sig")
+        csv_data = reports.to_csv(index=False).encode("utf-8-sig")
 
-    st.download_button(
-        label="📥 Download CSV Report",
-        data=csv_data,
-        file_name="agrivision_scan_reports.csv",
-        mime="text/csv"
-    )
-else:
-    st.info("No scan reports available yet.")
+        st.download_button(
+            label="📥 Download CSV Report",
+            data=csv_data,
+            file_name="agrivision_scan_reports.csv",
+            mime="text/csv"
+        )
+    else:
+        st.info("No scan reports available yet.")
     if not MODEL_PATH.exists():
         raise FileNotFoundError(f"Missing model file: {MODEL_PATH}")
     return tf.keras.models.load_model(MODEL_PATH)
